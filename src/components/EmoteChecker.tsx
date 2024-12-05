@@ -141,7 +141,6 @@ const EmoteChecker: Component = () => {
 		return (
 			<div class="flex flex-col gap-1">
 				<div class="flex items-center gap-2 antialiased">
-					<span>Emote:</span>
 					<span class="font-medium">{props.emoteName}</span>
 					<span class="px-2 py-1 text-sm bg-yellow-500/20 text-yellow-300 rounded-full">
 						{props.emotes.length} duplicates
