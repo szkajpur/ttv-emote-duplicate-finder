@@ -203,7 +203,7 @@ const EmoteChecker: Component = () => {
 						</a>
 					</p>
 					<a
-						href="https://github.com/szkajpur/emotes-tools"
+						href="https://github.com/szkajpur/ttv-emote-duplicate-finder"
 						target="_blank"
 						rel="noopener noreferrer"
 						class="inline-flex items-center gap-2 text-gray-400 hover:text-gray-300 transition-colors"
