@@ -1,0 +1,13 @@
+---
+import EmoteChecker from "../components/EmoteChecker";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="TTV Emote Duplicate Checker">
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="antialiased text-3xl font-bold text-center mb-8 text-white bg-clip-text bg-gradient-to-r from-purple-500 to-blue-500">
+      Twitch Emote Duplicate Checker 🧐
+    </h1>
+    <EmoteChecker client:load />
+  </main>
+</Layout>
