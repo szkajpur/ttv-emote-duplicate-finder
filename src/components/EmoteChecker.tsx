@@ -23,7 +23,7 @@ interface EmoteGroup {
 const getProviderName = (provider: number): string => {
 	switch (provider) {
 		case 0:
-			return "Twitch";
+			return "TTV Sub";
 		case 1:
 			return "7TV";
 		case 2:
@@ -48,6 +48,39 @@ const getProviderColor = (provider: number): string => {
 		default:
 			return "bg-gray-500/20 text-gray-300";
 	}
+};
+
+const getEmoteUrl = (emote: Emote, channel: string): string => {
+	const provider = emote.provider;
+
+	if (provider === 0) {
+		return `https://www.twitch.tv/subs/${channel}`;
+	}
+
+	const imageUrl = emote.urls[0].url;
+
+	if (provider === 1) {
+		const match = imageUrl.match(/emote\/(.*?)\//);
+		if (match?.[1]) {
+			return `https://7tv.app/emotes/${match[1]}`;
+		}
+	}
+
+	if (provider === 2) {
+		const match = imageUrl.match(/emote\/(.*?)\//);
+		if (match?.[1]) {
+			return `https://betterttv.com/emotes/${match[1]}`;
+		}
+	}
+
+	if (provider === 3) {
+		const match = imageUrl.match(/emote\/(\d+)/);
+		if (match?.[1]) {
+			return `https://www.frankerfacez.com/emoticon/${match[1]}`;
+		}
+	}
+
+	return "#";
 };
 
 const EmoteChecker: Component = () => {
@@ -135,9 +168,6 @@ const EmoteChecker: Component = () => {
 		emotes: Emote[];
 		caseSensitive: boolean;
 	}> = (props) => {
-		const uniqueNames = [...new Set(props.emotes.map((e) => e.code))];
-		const hasMultipleNames = uniqueNames.length > 1;
-
 		return (
 			<div class="flex flex-col gap-1">
 				<div class="flex items-center gap-2 antialiased">
@@ -146,11 +176,6 @@ const EmoteChecker: Component = () => {
 						{props.emotes.length} duplicates
 					</span>
 				</div>
-				{hasMultipleNames && !props.caseSensitive && (
-					<div class="text-sm text-gray-400 antialiased">
-						Variations: {uniqueNames.join(", ")}
-					</div>
-				)}
 			</div>
 		);
 	};
@@ -241,7 +266,6 @@ const EmoteChecker: Component = () => {
                    transition-all duration-300 outline-none antialiased
                    placeholder-gray-500"
 						required
-						disabled={emotes.loading}
 					/>
 					<div
 						class="absolute inset-0 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 
@@ -276,15 +300,10 @@ const EmoteChecker: Component = () => {
 
 				<button
 					type="submit"
-					disabled={emotes.loading}
 					class="px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg
-               transition-all duration-300 transform antialiased
-               ${emotes.loading ? 
-                 'opacity-75 cursor-not-allowed' : 
-                 'hover:from-purple-500 hover:to-blue-500 hover:scale-105 active:scale-95'
-               }"
+               transition-all duration-300 transform antialiased hover:from-purple-500 hover:to-blue-500 hover:scale-105 active:scale-95"
 				>
-					{emotes.loading ? "Loading emotes..." : "Check Emotes"}
+					Check Emotes
 				</button>
 			</form>
 
@@ -316,23 +335,13 @@ const EmoteChecker: Component = () => {
 			</Show>
 
 			<Show
-				when={
-					!emotes.loading &&
-					!error() &&
-					channel() &&
-					Object.keys(duplicates()).length > 0
-				}
+				when={!error() && channel() && Object.keys(duplicates()).length > 0}
 			>
 				<DuplicateStats duplicates={duplicates()} />
 			</Show>
 
 			<Show
-				when={
-					!emotes.loading &&
-					!error() &&
-					channel() &&
-					Object.keys(duplicates()).length === 0
-				}
+				when={!error() && channel() && Object.keys(duplicates()).length === 0}
 			>
 				<div class="text-center text-gray-400 animate-fade-in mb-8">
 					No duplicate emotes found
@@ -353,22 +362,32 @@ const EmoteChecker: Component = () => {
 									caseSensitive={caseSensitive()}
 								/>
 							</h3>
-							<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+							<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
 								<For each={dupeEmotes}>
 									{(emote) => (
 										<div
 											class="border border-gray-800 rounded-lg p-4 flex items-center gap-3
-                                bg-gray-800/30 hover:bg-gray-900/50 transition-all duration-300"
+                      bg-gray-800/30 hover:bg-gray-900/50 transition-all duration-300"
 										>
 											<EmoteImage urls={emote.urls} alt={emote.code} />
 											<div class="flex-1 min-w-0">
-												<span
-													class={`antialiased inline-block px-2 py-1 text-sm rounded-full mb-1 
-                                    ${getProviderColor(emote.provider)}`}
-												>
-													{getProviderName(emote.provider)}
-												</span>
-												<p class="antialiased text-sm text-gray-400">
+												<div class="flex items-center gap-2">
+													<a
+														href={getEmoteUrl(emote, channel())}
+														target="_blank"
+														rel="noopener noreferrer"
+														class="text-sm text-gray-200 hover:text-purple-400 transition-colors antialiased"
+													>
+														{emote.code}
+													</a>
+													<span
+														class={`antialiased inline-block px-2 py-1 text-sm rounded-full 
+                          ${getProviderColor(emote.provider)}`}
+													>
+														{getProviderName(emote.provider)}
+													</span>
+												</div>
+												<p class="antialiased text-sm text-gray-400 mt-1">
 													{emote.animated ? "Animated" : "Static"}
 												</p>
 											</div>
