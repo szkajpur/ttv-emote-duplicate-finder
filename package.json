@@ -12,11 +12,11 @@
 		"check": "biome check --write ./src/*"
 	},
 	"dependencies": {
-		"@astrojs/solid-js": "^5.0.10",
+		"@astrojs/solid-js": "^5.1.0",
 		"@astrojs/tailwind": "^5.1.5",
-		"@fontsource-variable/inter": "^5.2.5",
+		"@fontsource-variable/inter": "^5.2.6",
 		"@formkit/auto-animate": "^0.8.2",
-		"astro": "^5.7.14",
+		"astro": "^5.12.3",
 		"solid-js": "^1.9.7",
 		"tailwindcss": "^3.4.17"
 	},
