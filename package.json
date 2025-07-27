@@ -6,7 +6,6 @@
 		"dev": "astro dev",
 		"build": "astro build",
 		"preview": "astro preview",
-		"astro": "astro",
 		"format": "biome format --write ./src/*",
 		"lint": "biome lint --write ./src/*",
 		"check": "biome check --write ./src/*"
